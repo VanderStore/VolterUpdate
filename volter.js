@@ -1773,94 +1773,6 @@ break
             await volter.sendButtonText(m.chat, buttons, akhji, nyoutube, m, {mentions: ments})
             }
             break
-	    case 'yts': case 'ytsearch': {
-                if (!text) throw `Example : ${prefix + command} story wa anime`
-                let yts = require("yt-search")
-                let search = await yts(text)
-                let teks = 'YouTube Search\n\n Result From '+text+'\n\n'
-                let no = 1
-                for (let i of search.all) {
-                    teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
-                }
-                volter.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
-            }
-        break
-	    case 'play': case 'ytplay': {
-	            if (!isPremium) throw mess.premime
-                if (!text) throw `Example : ${prefix + command} story wa anime`
-                let yts = require("yt-search")
-                let search = await yts(text)
-                let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
-                let buttons = [
-                    {buttonId: `ytmp3 ${anu.url}`, buttonText: {displayText: '♫ Audio'}, type: 1},
-                    {buttonId: `ytmp4 ${anu.url}`, buttonText: {displayText: '► Video'}, type: 1}
-                ]
-                let buttonMessage = {
-                    image: { url: anu.thumbnail },
-                    caption: `
-⭔ Title : ${anu.title}
-⭔ Ext : Search
-⭔ ID : ${anu.videoId}
-⭔ Duration : ${anu.timestamp}
-⭔ Viewers : ${anu.views}
-⭔ Upload At : ${anu.ago}
-⭔ Author : ${anu.author.name}
-⭔ Channel : ${anu.author.url}
-⭔ Description : ${anu.description}
-⭔ Url : ${anu.url}`,
-                    footer: volter.user.name,
-                    buttons: buttons,
-                    headerType: 4
-                }
-                volter.sendMessage(m.chat, buttonMessage, { quoted: m })
-            }
-            break
-	    case 'ytmp3': case 'ytaudio': {
-                let { yta } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 128kbps`
-                let quality = args[1] ? args[1] : '128kbps'
-                let media = await yta(text, quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                volter.sendImage(m.chat, media.thumb, `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}`, m)
-                volter.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
-            }
-            break
-            case 'ytmp4': case 'ytvideo': {
-                let { ytv } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27 360p`
-                let quality = args[1] ? args[1] : '360p'
-                let media = await ytv(text, quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                volter.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${isUrl(text)}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
-            }
-            break
-	    case 'getmusic': {
-                let { yta } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} 1`
-                if (!m.quoted) return m.reply('Reply Pesan')
-                if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
-		let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
-                if (!urls) throw `Mungkin pesan yang anda reply tidak mengandung result ytsearch`
-                let quality = args[1] ? args[1] : '128kbps'
-                let media = await yta(urls[text - 1], quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                volter.sendImage(m.chat, media.thumb, `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${urls[text - 1]}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '128kbps'}`, m)
-                volter.sendMessage(m.chat, { audio: { url: media.dl_link }, mimetype: 'audio/mpeg', fileName: `${media.title}.mp3` }, { quoted: m })
-            }
-            break
-            case 'getvideo': {
-                let { ytv } = require('./lib/y2mate')
-                if (!text) throw `Example : ${prefix + command} 1`
-                if (!m.quoted) return m.reply('Reply Pesan')
-                if (!m.quoted.isBaileys) throw `Hanya Bisa Membalas Pesan Dari Bot`
-                let urls = quoted.text.match(new RegExp(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed|shorts)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/, 'gi'))
-                if (!urls) throw `Mungkin pesan yang anda reply tidak mengandung result ytsearch`
-                let quality = args[1] ? args[1] : '360p'
-                let media = await ytv(urls[text - 1], quality)
-                if (media.filesize >= 100000) return m.reply('File Melebihi Batas '+util.format(media))
-                volter.sendMessage(m.chat, { video: { url: media.dl_link }, mimetype: 'video/mp4', fileName: `${media.title}.mp4`, caption: `⭔ Title : ${media.title}\n⭔ File Size : ${media.filesizeF}\n⭔ Url : ${urls[text - 1]}\n⭔ Ext : MP3\n⭔ Resolusi : ${args[1] || '360p'}` }, { quoted: m })
-            }
-            break
                      
 //PEMBATAS Downloads=======================================
              case 'tiktok': case 'tiktoknowm': {
@@ -1922,11 +1834,33 @@ break
 
 //PEMBATAS Menu=======================================
             case 'rules': {
-rules = `╭──❍ *Rules BOT*
-│
-│ *Intinya Jangan Spam❗*
-│
-╰────❍`
+rules = `*Rules Bot*:
+1. Dilarang telp/vc bot
+2. Harap beri jeda saat menggunakan bot (jangan spam)
+3. Dilarang mengeksploitasi bot
+4. Dilarang menjual belikan bot, sebab bot ini free untuk digunakan (kecuali memasukkan ke dalam group)
+5. Bot tidak menyimpan data user
+6. Kami tidak bertanggung jawab atas apa yg user lakukan kepada bot ataupun sebaliknya
+7. Hindari konten pornografi (berupa gambar, dokumen, video, dan stiker)
+8. Bot yang sudah dikick dari group berarti masa sewa habis
+
+*Kebijakan Privasi:*
+ 1. bot tidak akan merekam data riwayat chat user. 
+ 2. bot tidak akan menyebarkan nomor users. 
+ 3. bot tidak akan menyimpan media yang dikirimkan oleh users. 
+ 4. bot tidak akan menyalah gunakan data data users. 
+ 5. Owner bot berhak melihat data riwayat chat users. 
+ 6. Owner bot berhak melihat status users. 
+ 7. Owner bot dapat melihat riwayat chat, dan media yang dikirimkan users.
+ 
+ Syarat Ketentuan Bot 
+ 1. Bot akan keluar dari group apabila sudah waktunya keluar
+ 2. bot dapan mem-ban users secara sepihak terlepas dari users salah atau tidak
+ 3. bot tidak akan bertanggungjawab atas apapun yang users lakukan terhadap fitur bot 
+ 4. bot akan memberlakukan hukuman: block atau ban terhadap users yang melanggar peraturan 
+ 5. bot bertanggung jawab atas kesalahan fatal dalam programing maupun owner
+
+Tahulah berterimakasih sebab anda tidak perlu membayar untuk menggunakan bot ini, gunakan secara bijak, jangan berlebihan.`
 let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' }, type: 1 },{ buttonId: 'donasi', buttonText: { displayText: '👑Sewa' }, type: 1 }]
             await volter.sendButtonText(m.chat, buttons, rules, nyoutube, m, {quoted: fkontak})
             }
@@ -1947,9 +1881,6 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
 │ • *Limit* : ${isPremium ? '♾Unlimited' : `〽️${db.data.users[m.sender].limit}`}
 ╰───────────────⊱
 
-◾premium
-◽limit
-
 *⛦ RUNTIME SERVER ⛦*
  ${runtime(process.uptime())}
  
@@ -1965,17 +1896,16 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
 ╰───────────────⊱
 
 ╭──❲ *DOWNLOADER MENU* ❳
-│◦〉 ${prefix}tiktoknowm ◾
-│◦〉 ${prefix}tiktokmp3 ◾
-│◦〉 ${prefix}play ◾
-│◦〉 ${prefix}film ◾
+│◦〉 ${prefix}tiktoknowm 
+│◦〉 ${prefix}tiktokmp3 
+│◦〉 ${prefix}film 
 ╰───────────────⊱
 
 ╭──❲ *CONVERT MENU* ❳
-│◦〉 ${prefix}attp ◾
-│◦〉 ${prefix}toimage ◾
-│◦〉 ${prefix}sticker ◾
-│◦〉 ${prefix}removebg ◾
+│◦〉 ${prefix}attp 
+│◦〉 ${prefix}toimage 
+│◦〉 ${prefix}sticker 
+│◦〉 ${prefix}removebg 
 │◦〉 ${prefix}tourl
 │◦〉 ${prefix}tovideo
 │◦〉 ${prefix}smeme
@@ -1999,13 +1929,13 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
 ╰───────────────⊱
 
 ╭──❲ *GAME MENU* ❳
-│◦〉 ${prefix}jodohku ◽
-│◦〉 ${prefix}apakah ◽
-│◦〉 ${prefix}slot ◽
-│◦〉 ${prefix}jadian ◽
-│◦〉 ${prefix}kapankah ◽
-│◦〉 ${prefix}gbtku ◾
-│◦〉 ${prefix}bisakah ◾
+│◦〉 ${prefix}jodohku 
+│◦〉 ${prefix}apakah 
+│◦〉 ${prefix}slot 
+│◦〉 ${prefix}jadian 
+│◦〉 ${prefix}kapankah 
+│◦〉 ${prefix}gbtku 
+│◦〉 ${prefix}bisakah 
 │◦〉 ${prefix}tictactoe
 │◦〉 ${prefix}afk
 │◦〉 ${prefix}suitpvp

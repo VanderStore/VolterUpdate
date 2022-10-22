@@ -1,10 +1,6 @@
-/**
-   * Create By Volter Store
-*/
-
 require('./config')
-const { default: volterConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, getContentType, jidDecode, proto } = require("@adiwajshing/baileys")
-const { state, saveState } = useSingleFileAuthState(`./${sessionName}.json`)
+const { default: volterConnect, useSingleFileAuthState, DisconnectReason, fetchLatestBaileysVersion, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, downloadContentFromMessage, makeInMemoryStore, jidDecode, proto } = require("@adiwajshing/baileys")
+const { state, saveState } = useSingleFileAuthState(`./session/${sessionName}.json`)
 const pino = require('pino')
 const { Boom } = require('@hapi/boom')
 const fs = require('fs')
@@ -63,13 +59,13 @@ loadDatabase()
 // save database every 30seconds
 if (global.db) setInterval(async () => {
     if (global.db.data) await global.db.write()
-  }, 30 * 20000)
+  }, 30 * 1000)
 
 async function startVolter() {
     const volter = volterConnect({
         logger: pino({ level: 'silent' }),
         printQRInTerminal: true,
-        browser: ['Volter','Firefox','1.0.0'],
+        browser: ['YT VOLTER','Safari','1.0.0'],
         auth: state
     })
 
@@ -85,6 +81,22 @@ async function startVolter() {
     await volter.updateBlockStatus(callerId, "block")
     }
     })
+
+    volter.ev.on('messages.upsert', async chatUpdate => {
+        //console.log(JSON.stringify(chatUpdate, undefined, 2))
+        try {
+        mek = chatUpdate.messages[0]
+        if (!mek.message) return
+        mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+        if (mek.key && mek.key.remoteJid === 'status@broadcast') return
+        if (!volter.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
+        if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
+        m = smsg(volter, mek, store)
+        require("./volter")(volter, m, chatUpdate, store)
+        } catch (err) {
+            console.log(err)
+        }
+    })
     
     // Group Update
     volter.ev.on('groups.update', async pea => {
@@ -95,17 +107,17 @@ async function startVolter() {
        } catch {
        ppgc = 'https://shortlink.hisokaarridho.my.id/rg1oT'
        }
-       let wm_fatih = { url : ppgc }
+       let wm_volterdev = { url : ppgc }
        if (pea[0].announce == true) {
-       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup telah ditutup oleh admin, Sekarang hanya admin yang dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
+       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup telah ditutup oleh admin, Sekarang hanya admin yang dapat mengirim pesan !`, `Group Settings Change Message by Volter Dev`, wm_volterdev, [])
        } else if(pea[0].announce == false) {
-       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup telah dibuka oleh admin, Sekarang peserta dapat mengirim pesan !`, `Group Settings Change Message`, wm_fatih, [])
+       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup telah dibuka oleh admin, Sekarang peserta dapat mengirim pesan !`, `Group Settings Change Message by Volter Dev`, wm_volterdev, [])
        } else if (pea[0].restrict == true) {
-       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nInfo group telah dibatasi, Sekarang hanya admin yang dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
+       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nInfo group telah dibatasi, Sekarang hanya admin yang dapat mengedit info group !`, `Group Settings Change Message by Volter Dev`, wm_volterdev, [])
        } else if (pea[0].restrict == false) {
-       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nInfo group telah dibuka, Sekarang peserta dapat mengedit info group !`, `Group Settings Change Message`, wm_fatih, [])
+       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nInfo group telah dibuka, Sekarang peserta dapat mengedit info group !`, `Group Settings Change Message by Volter Dev`, wm_volterdev, [])
        } else {
-       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup Subject telah diganti menjadi *${pea[0].subject}*`, `Group Settings Change Message`, wm_fatih, [])
+       volter.send5ButImg(pea[0].id, `「 *Group Settings Change* 」\n\nGroup Subject telah diganti menjadi *${pea[0].subject}*`, `Group Settings Change Message by Volter Dev`, wm_volterdev, [])
      }
     })
 
@@ -128,15 +140,18 @@ async function startVolter() {
                 } catch {
                     ppgroup = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
                 }
-
-                let buttons = [{ buttonId: 'owner', buttonText: { displayText: '👤Owner' }, type: 1 },{ buttonId: 'rules', buttonText: { displayText: '❗Rules' }, type: 1 }]
+                
+                let buttons = [{ buttonId: 'donasi', buttonText: { displayText: '🙏Donasi' }, type: 1 },{ buttonId: 'rules', buttonText: { displayText: '❗Rules' }, type: 1 }]
                 let nyoutube = ('© Volter Botz')
+                let jumhal = '100000000000000'
                 if (anu.action == 'add') {
-                    volter.sendMessage(anu.id, { image: { url: ppuser }, fileLength: jumhal, contextInfo: { mentionedJid: [num] }, caption: `*Hai Kak @${num.split("@")[0]}*\n*Selamat Datang Di Grup ${metadata.subject}*\n\n*Intro Dulu Yuk*\n\n*➪ Nama:*\n*➪ Umur:*\n*➪ Askot:*\n\n*Jangan Lupa Baca Dan Patuhi Peraturan Yang Ada`, buttons: buttons, footer: nyoutube})
+                    volter.sendMessage(anu.id, { image: { url: ppuser }, fileLength: jumhal, contextInfo: { mentionedJid: [num] }, caption: `*Hai Kak @${num.split("@")[0]}*\n*Selamat Datang Di Grup ${metadata.subject}*\n\n*Intro Dulu Yuk*\n\n*➪ Nama:*\n*➪ Umur:*\n*➪ Askot:*\n\n*Jangan Lupa Baca Dan Patuhi Peraturan Yang Ada Jangan Buta*`, buttons: buttons, footer: nyoutube})
+                } else if (anu.action == 'remove') {
+                    volter.sendMessage(anu.id, { image: { url: ppuser }, fileLength: jumhal, contextInfo: { mentionedJid: [num] }, caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}`, buttons: buttons, footer: nyoutube})
                 } else if (anu.action == 'promote') {
-                    volter.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `*@${num.split('@')[0]} Berhasil Di Naikan Jadi Admin ${metadata.subject}*` })
+                    volter.sendMessage(anu.id, { image: { url: ppuser }, fileLength: jumhal, mentions: [num], caption: `@${num.split('@')[0]} Promote From ${metadata.subject}`, buttons: buttons, footer: nyoutube})
                 } else if (anu.action == 'demote') {
-                    volter.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `*@${num.split('@')[0]} Berhasil Di Turunkan Jadi Admin ${metadata.subject}*` })
+                    volter.sendMessage(anu.id, { image: { url: ppuser },fileLength: jumhal,  mentions: [num], caption: `@${num.split('@')[0]} Demote From ${metadata.subject}`, buttons: buttons, footer: nyoutube})
               }
             }
         } catch (err) {
@@ -183,7 +198,7 @@ async function startVolter() {
 	for (let i of kon) {
 	    list.push({
 	    	displayName: await volter.getName(i + '@s.whatsapp.net'),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await volter.getName(i + '@s.whatsapp.net')}\nFN:${await volter.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Ponsel\nitem2.EMAIL;type=INTERNET:tes1929@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://instagram.com/inibotvolter\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;Indonesia;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await volter.getName(i + '@s.whatsapp.net')}\nFN:${await volter.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Ponsel\nitem2.EMAIL;type=INTERNET:volterbusinnes@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://instagram.com/volter.dev\nitem3.X-ABLabel:Instagram\nitem4.ADR:;;Indonesia;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
 	    })
 	}
 	volter.sendMessage(jid, { contacts: { displayName: `${list.length} Kontak`, contacts: list }, ...opts }, { quoted })
@@ -207,9 +222,7 @@ async function startVolter() {
     }
 	
     volter.public = true
-	 volter.autosw = false
-	 volter.sendsw = '12053901620@s.whatsapp.net'
-	 
+
     volter.serializeM = (m) => smsg(volter, m, store)
 
     volter.ev.on('connection.update', async (update) => {
@@ -219,16 +232,29 @@ async function startVolter() {
             if (reason === DisconnectReason.badSession) { console.log(`Bad Session File, Please Delete Session and Scan Again`); volter.logout(); }
             else if (reason === DisconnectReason.connectionClosed) { console.log("Connection closed, reconnecting...."); startVolter(); }
             else if (reason === DisconnectReason.connectionLost) { console.log("Connection Lost from Server, reconnecting..."); startVolter(); }
-            else if (reason === DisconnectReason.connectionReplaced) { console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First"); Volter.logout(); }
+            else if (reason === DisconnectReason.connectionReplaced) { console.log("Connection Replaced, Another New Session Opened, Please Close Current Session First"); volter.logout(); }
             else if (reason === DisconnectReason.loggedOut) { console.log(`Device Logged Out, Please Scan Again And Run.`); volter.logout(); }
             else if (reason === DisconnectReason.restartRequired) { console.log("Restart Required, Restarting..."); startVolter(); }
             else if (reason === DisconnectReason.timedOut) { console.log("Connection TimedOut, Reconnecting..."); startVolter(); }
             else Volter.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
-        console.log('Connected...', update)
+        console.log('Berhasil Terhubung Di Server Volter', update)
     })
 
     volter.ev.on('creds.update', saveState)
+    
+    /** Resize Image
+      *
+      * @param {Buffer} Buffer (Only Image)
+      * @param {Numeric} Width
+      * @param {Numeric} Height
+      */
+      volter.reSize = async (image, width, height) => {
+       let jimp = require('jimp')
+       var oyy = await jimp.read(image);
+       var kiyomasa = await oyy.resize(width, height).getBufferAsync(jimp.MIME_JPEG)
+       return kiyomasa
+      }
 
     // Add Other
 
@@ -283,6 +309,20 @@ async function startVolter() {
         }
         volter.sendMessage(jid, listMes, { quoted: quoted })
         }
+        
+        /** Send Button 5 Location
+       *
+       * @param {*} jid
+       * @param {*} text
+       * @param {*} footer
+       * @param {*} location
+       * @param [*] button
+       * @param {*} options
+       */
+      volter.send5ButLoc = async (jid , text = '' , footer = '', lok, but = [], options = {}) =>{
+      let bb = await volter.reSize(lok, 300, 300)
+      volter.sendMessage(jid, { location: { jpegThumbnail: bb }, caption: text, footer: footer, templateButtons: but, ...options })
+      }
 
     /** Send Button 5 Message
      * 
@@ -612,7 +652,8 @@ async function startVolter() {
         } : {})
         await volter.relayMessage(jid, waMessage.message, { messageId:  waMessage.key.id })
         return waMessage
-    };
+    }
+
     volter.cMod = (jid, copy, text = '', sender = volter.user.id, options = {}) => {
         //let copy = message.toJSON()
 		let mtype = Object.keys(copy.message)[0]
@@ -664,35 +705,7 @@ async function startVolter() {
         }
 
     }
-volter.ev.on('messages.upsert', async chatUpdate => {
-        //console.log(JSON.stringify(chatUpdate, undefined, 2))
-        try {
-        mek = chatUpdate.messages[0]
-        if (!mek.message) return
-			if (mek.key.remoteJid === 'status@broadcast') {
-				let bot = volter.decodeJid(volter.user.id)
-				if (!volter.autosw) return
-				setTimeout(() => {
-					volter.readMessages([mek.key])
-					let mt = getContentType(mek.message)
-					console.log((/protocolMessage/i.test(mt)) ? `${mek.key.participant.split('@')[0]} Telah menghapus Story nya` : 'Melihat story user : '+mek.key.participant.split('@')[0]);
-					if (/protocolMessage/i.test(mt)) volter.sendMessage(volter.sendsw, {text:'Status dari @'+mek.key.participant.split('@')[0]+' Telah dihapus', mentions: [mek.key.participant]})
-					if (/(imageMessage|videoMessage|extendedTextMessage)/i.test(mt)) {
-						let keke = (mt == 'extendedTextMessage') ? `\nStory Teks Berisi : ${mek.message.extendedTextMessage.text}` : (mt == 'imageMessage') ? `\nStory Gambar dengan Caption : ${mek.message.imageMessage.caption}` : (mt == 'videoMessage') ? `\nStory Video dengan Caption : ${mek.message.videoMessage.caption}` : '\nTidak diketahui cek saja langsung!!!'
-						volter.sendMessage(volter.sendsw, {text: 'Melihat story dari @'+mek.key.participant.split('@')[0] + keke, mentions: [mek.key.participant]});
-					}
-				}, 2000);
-			}
-			if (!mek.message) return
-        mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
-        if (!volter.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
-        if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
-        m = smsg(volter, mek, store)
-        require("./volter")(volter, m, chatUpdate, store)
-        } catch (err) {
-            console.log(err)
-        }
-    })
+
     return volter
 }
 
