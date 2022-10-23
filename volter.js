@@ -1888,7 +1888,7 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
  _Note : bot whatsapp iyalah bot hasil coding untuk berjalan sebagai kebutuhan di WhatsApp , bot whatsap mempunyai sistem unik , bisa membuat apa pun sesuai list commands_`
             let ments = [ownernya, me, ini_mark]
             let buttons = [{ buttonId: 'Owner', buttonText: { displayText: '👤Owner' }, type: 1 }]
-            await volter.sendButtonText(m.chat, buttons, rules, nyoutubee, m, {quoted: fkontak})
+            await volter.sendButtonText(m.chat, buttons, jawab, nyoutubee, m, {mentions: ments, quoted: fkontak})
             }
             break
             case 'allmenu': {
@@ -1952,7 +1952,7 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
 ╰───────⊱`
             let ments = [ownernya, me, ini_mark]
             let buttons = [{ buttonId: 'Owner', buttonText: { displayText: '👤Owner' }, type: 1 }]
-            await volter.sendButtonText(m.chat, buttons, rules, nyoutube, m, {quoted: fkontak})
+            await volter.sendButtonText(m.chat, buttons, jawab, nyoutube, m, {mentions: ments, quoted: fkontak})
  }
  break
 case 'sound1':
