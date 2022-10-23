@@ -32,6 +32,7 @@ const barat = moment.tz('Asia/Jakarta').format('HH:mm:ss')
 const tengah = moment.tz('Asia/Makassar').format('HH:mm:ss')
 const timur = moment.tz('Asia/Jayapura').format('HH:mm:ss')
 const nyoutube = ('© Volter Botz')  //ubah di config biar ngk emror
+const nyoutubee = ('© Note : button tidak muncul ? ketik #allmenu') //ubah di config biar ngk emror
 const ini_mark = `0@s.whatsapp.net`
 const ownernya = ownernomer + '@s.whatsapp.net'
 gambar = fs.readFileSync('./media/image/volter.jpg')
@@ -1865,7 +1866,6 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
             await volter.sendButtonText(m.chat, buttons, rules, nyoutube, m, {quoted: fkontak})
             }
             break
-            case 'menu': {
             let ownernya = ownernomer + '@s.whatsapp.net'
             let me = m.sender
             let jawab = `_Hi ${pushname} ${ucapanWaktu}_
@@ -1884,87 +1884,75 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
 *⛦ RUNTIME SERVER ⛦*
  ${runtime(process.uptime())}
  
- _Note : bot whatsapp iyalah bot hasil coding untuk berjalan sebagai kebutuhan di WhatsApp , bot whatsap mempunyai sistem unik , bisa membuat apa pun sesuai list commands_
- 
-╭──❲ *NEW MENU* ❳
-│◦〉 ${prefix}menfess
-╰───────────────⊱
-
-╭──❲ *OTHERS MENU* ❳
-│◦〉 ${prefix}rules
-│◦〉 ${prefix}sewabot
-╰───────────────⊱
-
-╭──❲ *DOWNLOADER MENU* ❳
-│◦〉 ${prefix}tiktoknowm 
-│◦〉 ${prefix}tiktokmp3 
-│◦〉 ${prefix}film 
-╰───────────────⊱
-
-╭──❲ *CONVERT MENU* ❳
-│◦〉 ${prefix}attp 
-│◦〉 ${prefix}toimage 
-│◦〉 ${prefix}sticker 
-│◦〉 ${prefix}removebg 
-│◦〉 ${prefix}tourl
-│◦〉 ${prefix}tovideo
-│◦〉 ${prefix}smeme
-╰───────────────⊱
- 
-╭──❲ *GROUP MENU* ❳
-│◦〉 ${prefix}linkgroup
-│◦〉 ${prefix}ephemeral 
-│◦〉 ${prefix}setppgc
-│◦〉 ${prefix}setname
-│◦〉 ${prefix}setdesc 
-│◦〉 ${prefix}group 
-│◦〉 ${prefix}editinfo 
-│◦〉 ${prefix}kick 
-│◦〉 ${prefix}hidetag 
-│◦〉 ${prefix}tagall
-│◦〉 ${prefix}antilink 
-│◦〉 ${prefix}mute 
-│◦〉 ${prefix}promote 
-│◦〉 ${prefix}demote
-╰───────────────⊱
-
-╭──❲ *GAME MENU* ❳
-│◦〉 ${prefix}jodohku 
-│◦〉 ${prefix}apakah 
-│◦〉 ${prefix}slot 
-│◦〉 ${prefix}jadian 
-│◦〉 ${prefix}kapankah 
-│◦〉 ${prefix}gbtku 
-│◦〉 ${prefix}bisakah 
-│◦〉 ${prefix}tictactoe
-│◦〉 ${prefix}afk
-│◦〉 ${prefix}suitpvp
-╰───────────────⊱`
+ _Note : bot whatsapp iyalah bot hasil coding untuk berjalan sebagai kebutuhan di WhatsApp , bot whatsap mempunyai sistem unik , bisa membuat apa pun sesuai list commands_`
             let ments = [ownernya, me, ini_mark]
             let buttons = [{ buttonId: 'Owner', buttonText: { displayText: '👤Owner' }, type: 1 }]
-            let buttonMessage = {
-  document: fs.readFileSync('./media/doc/fake.pptx'),
-  fileName : akulaku + (` | Halo ${pushname}`),
-  mimetype: `${filsk}`,
-  fileLength: jumhal,
-  pageCount: jumlha,
-  caption: jawab,
-  footer: nyoutube,
-  buttons: buttons,
-  mentions: ments,
-  headerType: 4,
-  contextInfo:{externalAdReply:{
-  title: 'Volter Dev',
-  body: 'Subscribe My YouTube', 
-  showAdAttribution: true,
-  thumbnail: thumb,
-  mediaType: 2,
-  mediaUrl: myytv,
-  sourceUrl: myyt
-  }}
-  }
-  volter.sendMessage(m.chat, buttonMessage, {quoted: fkontak})
-  }
+            await volter.sendButtonText(m.chat, buttons, rules, nyoutubee, m, {quoted: fkontak})
+            }
+            break
+            case 'allmenu': {
+            let ownernya = ownernomer + '@s.whatsapp.net'
+            let me = m.sender
+            let jawab = `╭──❲ *NEW MENU* ❳
+│◦〉 menfess
+│◦〉 anonymous
+╰───────⊱
+
+╭──❲ *OTHERS MENU* ❳
+│◦〉 rules
+│◦〉 sewabot
+│◦〉 allmenu
+╰───────⊱
+
+╭──❲ *DOWNLOADER MENU* ❳
+│◦〉 tiktoknowm 
+│◦〉 tiktokmp3 
+│◦〉 film 
+╰───────⊱
+
+╭──❲ *CONVERT MENU* ❳
+│◦〉 attp 
+│◦〉 toimage 
+│◦〉 sticker 
+│◦〉 removebg 
+│◦〉 tourl
+│◦〉 tovideo
+│◦〉 smeme
+╰───────⊱
+ 
+╭──❲ *GROUP MENU* ❳
+│◦〉 linkgroup
+│◦〉 ephemeral 
+│◦〉 setppgc
+│◦〉 setname
+│◦〉 setdesc 
+│◦〉 group 
+│◦〉 editinfo 
+│◦〉 kick 
+│◦〉 hidetag 
+│◦〉 tagall
+│◦〉 antilink 
+│◦〉 mute 
+│◦〉 promote 
+│◦〉 demote
+╰───────⊱
+
+╭──❲ *GAME MENU* ❳
+│◦〉 jodohku 
+│◦〉 apakah 
+│◦〉 slot 
+│◦〉 jadian 
+│◦〉 kapankah 
+│◦〉 gbtku 
+│◦〉 bisakah 
+│◦〉 tictactoe
+│◦〉 afk
+│◦〉 suitpvp
+╰───────⊱`
+            let ments = [ownernya, me, ini_mark]
+            let buttons = [{ buttonId: 'Owner', buttonText: { displayText: '👤Owner' }, type: 1 }]
+            await volter.sendButtonText(m.chat, buttons, rules, nyoutube, m, {quoted: fkontak})
+ }
  break
 case 'sound1':
 case 'sound2':
