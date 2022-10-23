@@ -14,7 +14,7 @@ global.APIKeys = {
 // Other
 global.owner = ['12232080470']
 global.ownernomer = "12232080470"
-global.premium = ['12232080470','6287723814311']
+global.premium = ['12232080470','6287723814311','6289610145000']
 global.packname = 'Volter'
 global.author = 'Botz'
 global.sessionName = 'volter'  //jangan diganti bro nanti error
