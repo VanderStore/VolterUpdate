@@ -1866,6 +1866,7 @@ let buttons = [{ buttonId: 'menu', buttonText: { displayText: '📖List Menu' },
             await volter.sendButtonText(m.chat, buttons, rules, nyoutube, m, {quoted: fkontak})
             }
             break
+            case 'menu': {
             let ownernya = ownernomer + '@s.whatsapp.net'
             let me = m.sender
             let jawab = `_Hi ${pushname} ${ucapanWaktu}_
